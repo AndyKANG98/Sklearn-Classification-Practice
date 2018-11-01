@@ -186,7 +186,7 @@ The running time is: 2006.609518 seconds.
 
 <br>
 
-**Improve SVM: **
+**Improve SVM:**
 
 Since BF kernel of SVM assume that all features are centered around 0 and have variance in the same order. Some bias will happen if we directly use the original data. The Standard Scaler is a good tool to preprocess the data before fitting, to remove the mean and scaling to unit variance.
 
