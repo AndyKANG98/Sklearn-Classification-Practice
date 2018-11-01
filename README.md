@@ -186,6 +186,82 @@ The running time is: 2006.609518 seconds.
 
 <br>
 
+**Improve SVM: **
+
+Since BF kernel of SVM assume that all features are centered around 0 and have variance in the same order. Some bias will happen if we directly use the original data. The Standard Scaler is a good tool to preprocess the data before fitting, to remove the mean and scaling to unit variance.
+
+A function is added to the original process: 
+```python
+from sklearn.preprocessing import StandardScaler
+
+def scale_data(X):
+    scaler = StandardScaler().fit(X)
+    X_scale = scaler.transform(X)
+
+     return X_scale
+```
+
+Then, transform the data before fitting:
+```python
+X_train = scale_data(X_train)
+X_test = scale_data(X_test)    
+```
+
+
+The performance improved a lot after preprocessing:
+```
+When gamma = 0.001000, the mean accuracy is:  85.710578%
+When gamma = 0.010000, the mean accuracy is:  72.531159%
+When gamma = 0.100000, the mean accuracy is:  15.450359%
+When gamma = 1.000000, the mean accuracy is:  10.269990%
+
+The best gamma is:  0.001
+```
+
+As shown above, gamma=0.001 gave the best cross validation score. And the results are shown below: 
+
+```
+Training accuracy:  90.800000%
+Testing accuracy:  86.500000%
+
+===================Classification Report===================
+
+
+             precision    recall   f1-score   support 
+
+          0       0.85      0.83      0.84       107
+          1       0.97      0.95      0.96       105
+          2       0.75      0.81      0.78       111
+          3       0.79      0.86      0.82        93
+          4       0.86      0.81      0.83       115
+          5       0.94      0.92      0.93        87
+          6       0.71      0.65      0.68        97
+          7       0.91      0.95      0.93        95
+          8       0.94      0.96      0.95        95
+          9       0.96      0.94      0.95        95
+
+avg / total       0.87      0.86      0.86      1000 
+
+===================Confusion Matrix===================
+ 
+[[ 89   0   2   7   0   0   7   0   2   0]
+ [  0 100   0   5   0   0   0   0   0   0]
+ [  2   0  90   2   8   0   8   0   1   0]
+ [  4   2   1  80   2   0   4   0   0   0]
+ [  0   0  14   3  93   0   5   0   0   0]
+ [  0   0   0   0   0  80   0   5   0   2]
+ [ 10   0  13   4   5   0  63   0   2   0]
+ [  0   0   0   0   0   3   0  90   0   2]
+ [  0   1   0   0   0   1   2   0  91   0]
+ [  0   0   0   0   0   1   0   4   1  89]] 
+
+
+The running time is: 1339.780733 seconds
+```
+
+The above preprocessing step – standard scaling increased the accuracy of SVM model a lot. 
+
+<br>
 <br>
 
 ## **Neural Network**

@@ -5,6 +5,7 @@ from sklearn.svm import SVC
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
+from sklearn.preprocessing import StandardScaler
 
 
 def load_data():
@@ -25,6 +26,18 @@ def load_data():
     y_test = np.reshape(y_test, -1)
 
     return X_train, y_train, X_test, y_test
+
+def scale_data(X):
+    """ Preprocess the X data with StandardScaler
+
+    Returns: 
+        X_scale: Standardize features by removing the mean and scaling to unit variance
+    """
+    scaler = StandardScaler().fit(X)
+
+    X_scale = scaler.transform(X)
+
+    return X_scale
 
 def select_gamma(X_train, y_train, gammas, k):
     """ Determine the kernel parameter best_gamma using cross validation
@@ -56,10 +69,14 @@ def select_gamma(X_train, y_train, gammas, k):
 
 
 def main():
-    # Load the data
+    # Load the data (Select to load original data or preprocessed data)
     X_train, y_train, X_test, y_test = load_data()
     
-    startTime = time.time()  
+    startTime = time.time()
+
+    # Transform the X data with StandardScaler
+    X_train = scale_data(X_train)
+    X_test = scale_data(X_test)
     
     # Give the gamma candidate values
     gammas = [0.001, 0.01, 0.1, 1]
